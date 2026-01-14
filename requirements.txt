@@ -8,3 +8,4 @@ langgraph
 mcp
 pymupdf
 httpx
+mistralai
