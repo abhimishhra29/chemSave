@@ -17,7 +17,6 @@ def search_manufacturer_node(state: State) -> State:
         raise ValueError("manufacturer_name is required for search_manufacturer_node")
     
     query = f'"{manufacturer_name}" official website Australia site:.com.au OR site:.au'
-    # tavily_results = tavily.invoke(query)
     tavily_results = tavily.invoke(query)
     state["manufacturer_url"] = tavily_results["results"][0]["url"]
 

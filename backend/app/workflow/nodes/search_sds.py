@@ -9,7 +9,7 @@ def search_sds_node(state: State) -> State:
     LangGraph Search SDS node:
     - reads manufacturer_name, product_name, product_code, cas_number, description from state
     - runs Tavily search
-    - stores search results in search_results
+    - stores search results in sds_results
     """
     manufacturer_name = state.get("manufacturer_name", "")
     product_name = state.get("product_name", "")
