@@ -5,10 +5,12 @@ from app.routers import identify_chemical
 from app.workflow.chemSaveGraph import ChemSaveGraph
 
 
-chem_graph = ChemSaveGraph()
-
 
 app = FastAPI(title="ChemCheck API")
+
+chem_graph = ChemSaveGraph()
+graph_app = chem_graph.build_graph()
+app.state.graph_app = graph_app
 
 app.include_router(health.router)
 app.include_router(identify_chemical.router, tags=["identify"])

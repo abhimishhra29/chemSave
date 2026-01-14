@@ -5,7 +5,8 @@ from .nodes.ocr_node import ocr_node
 from app.agents.ocr_agent import OCRAgent
 
 class ChemSaveGraph:
-    def __init_(self):
+
+    def __init__(self):
         self.graph = StateGraph(State)
         
     def build_graph(self):

@@ -13,5 +13,5 @@ def ocr_node(state: State) -> State:
 
     image_bytes = state["image_bytes"]
     state["ocr_text"] = ocr_agent.process(image_bytes)
-    print("OCR Text:", state["ocr_text"][:100])  # Print first 100 characters of OCR text
+    print("OCR Text:", state["ocr_text"])  # Print first 100 characters of OCR text
     return state
