@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 
 from app.routers import health
-
+from app.routers import identify_chemical
 app = FastAPI(title="ChemCheck API")
 
 app.include_router(health.router)
+app.include_router(identify_chemical.router, tags=["identify"])
 
 
 @app.get("/")
