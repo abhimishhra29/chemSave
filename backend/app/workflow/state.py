@@ -7,8 +7,8 @@ class State(TypedDict):
 
     # inputs to search (you can fill these later via an LLM parse node)
     manufacturer_name: Optional[str]
+    manufacturer_url: Optional[str]
     product_name: Optional[str]
     product_code: Optional[str]
     cas_number: Optional[str]
     description: Optional[str]
-    

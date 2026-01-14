@@ -11,3 +11,4 @@ pymupdf
 httpx
 mistralai
 langchain-community
+langchain_tavily

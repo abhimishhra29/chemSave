@@ -1,7 +1,8 @@
 from app.workflow.state import State
-from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_tavily import TavilySearch
+from urllib.parse import urlparse
 
-tavily = TavilySearchResults(max_results=5)
+tavily = TavilySearch(max_results=1)
 
 def search_manufacturer_node(state: State) -> State:
     """
@@ -18,9 +19,7 @@ def search_manufacturer_node(state: State) -> State:
     
     query = f'"{manufacturer_name}" official website Australia site:.com.au OR site:.au'
 
-    state["search_results"] = tavily.invoke(query)
-
-    print("Search Results:", state["search_results"])  # Print search results
+    tavily_results = tavily.invoke(query)
+    state["manufacturer_url"] = tavily_results["results"][0]["url"]
     return state
 
-    
