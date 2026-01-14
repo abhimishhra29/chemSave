@@ -21,4 +21,5 @@ def ocr_node(state: State) -> State:
     state["manufacturer_name"] = ocr_result.get("manufacturer_name")
     state["description"] = ocr_result.get("description")
     
+    print("Manufactuer_name: ",state["manufacturer_name"], "product_name", state["product_name"])
     return state

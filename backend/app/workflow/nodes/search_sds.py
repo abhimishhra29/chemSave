@@ -11,18 +11,20 @@ def search_sds_node(state: State) -> State:
     - runs Tavily search
     - stores search results in search_results
     """
-
     manufacturer_name = state.get("manufacturer_name", "")
     product_name = state.get("product_name", "")
     product_code = state.get("product_code", "")
     cas_number = state.get("cas_number", "")
     description = state.get("description", "")  
-    manfactuerer_url = state.get("manufacturer_url", "")
+    manufacturer_url = state.get("manufacturer_url", "")
+
+    domain = urlparse(manufacturer_url).netloc 
 
     search_terms = [t for t in [manufacturer_name, product_name, product_code, cas_number, description] if t]
     terms_query = " OR ".join(f'"{t}"' for t in search_terms)
-    query = (f'site:{manfactuerer_url} ({terms_query}) '
+    query = (f'site:{domain} ({terms_query}) '
             '("SDS" OR "Safety Data Sheet") filetype:pdf')
     sds_results = tavily.invoke(query)
-    print(sds_results)
+    state["sds_search_results"] = sds_results["results"]
+    print("SDS Search Results: ", state["sds_search_results"])
     return state

@@ -1,7 +1,7 @@
 from app.workflow.state import State
 from langchain_tavily import TavilySearch
 
-tavily = TavilySearch(max_results=1)
+tavily = TavilySearch(max_results=5, include_domains=[".au"])
 
 def search_manufacturer_node(state: State) -> State:
     """
@@ -20,5 +20,6 @@ def search_manufacturer_node(state: State) -> State:
 
     tavily_results = tavily.invoke(query)
     state["manufacturer_url"] = tavily_results["results"][0]["url"]
+    print("Manufacturer URL: ", state["manufacturer_url"])
     return state
 
