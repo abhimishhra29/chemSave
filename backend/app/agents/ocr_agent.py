@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 
 load_dotenv()
-
+from langchain_core.utils.json import parse_json_markdown
 import base64
 from mistralai import Mistral
 
@@ -41,4 +41,7 @@ class OCRAgent:
                 ],
             }],
         )
-        return resp.choices[0].message.content
+
+        raw = resp.choices[0].message.content
+        
+        return parse_json_markdown(raw)

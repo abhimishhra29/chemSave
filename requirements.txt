@@ -4,8 +4,10 @@ streamlit
 python-multipart
 requests
 python-dotenv
+langchain
 langgraph
 mcp
 pymupdf
 httpx
 mistralai
+langchain-community
