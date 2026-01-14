@@ -4,7 +4,7 @@ from langgraph.graph import END, START, StateGraph
 from .nodes.ocr_node import ocr_node
 from app.agents.ocr_agent import OCRAgent
 from .nodes.search_manufacturer import search_manufacturer_node
-
+from .nodes.search_sds import search_sds_node
 class ChemSaveGraph:
 
     def __init__(self):
@@ -14,10 +14,12 @@ class ChemSaveGraph:
         #Defined nodes
         self.graph.add_node("OCR Extraction", ocr_node)
         self.graph.add_node("Search Manufacturer", search_manufacturer_node)
+        self.graph.add_node("Search SDS", search_sds_node)
 
         #Defined edges
         self.graph.add_edge(START, "OCR Extraction")
         self.graph.add_edge("OCR Extraction", "Search Manufacturer")  # 🔗 connect them
+        self.graph.add_edge("Search Manufacturer", "Search SDS")  # 🔗 connect them
         self.graph.add_edge("OCR Extraction", END)
         
         return self.graph.compile()

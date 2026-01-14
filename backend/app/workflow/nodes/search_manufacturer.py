@@ -1,15 +1,14 @@
 from app.workflow.state import State
 from langchain_tavily import TavilySearch
-from urllib.parse import urlparse
 
 tavily = TavilySearch(max_results=1)
 
 def search_manufacturer_node(state: State) -> State:
     """
     LangGraph Search Manufacturer node:
-    - reads manufacturer_name, product_name, product_code, cas_number, description from state
+    - reads manufacturer_name
     - runs Tavily search
-    - stores search results in search_results
+    - stores search results in tavily_results
     """
 
     manufacturer_name = state.get("manufacturer_name", "")
