@@ -18,15 +18,9 @@ def search_manufacturer_node(state: State) -> State:
     
     query = f'"{manufacturer_name}" official website Australia site:.com.au OR site:.au'
     # tavily_results = tavily.invoke(query)
-
-<<<<<<< HEAD
     tavily_results = tavily.invoke(query)
     state["manufacturer_url"] = tavily_results["results"][0]["url"]
-=======
-    # state["manufacturer_url"] = tavily_results["results"][0]["url"]
-    state["manufacturer_url"] = "https://www.sydneysolvents.com.au"
 
->>>>>>> 5445280 (updated tavily mock)
     print("Manufacturer URL: ", state["manufacturer_url"])
     return state
 
