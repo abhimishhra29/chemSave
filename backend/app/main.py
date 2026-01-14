@@ -1,10 +1,11 @@
 from fastapi import FastAPI
-
+import os
 from app.routers import health
 from app.routers import identify_chemical
 from app.workflow.chemSaveGraph import ChemSaveGraph
+from dotenv import load_dotenv
 
-
+load_dotenv()
 
 app = FastAPI(title="ChemCheck API")
 

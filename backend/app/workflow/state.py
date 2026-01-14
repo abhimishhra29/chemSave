@@ -12,3 +12,5 @@ class State(TypedDict):
     product_code: Optional[str]
     cas_number: Optional[str]
     description: Optional[str]
+    sds_search_results: Optional[str]
+    validation_status:  bool

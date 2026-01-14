@@ -1,12 +1,10 @@
 import os
 from mistralai import Mistral
 from dotenv import load_dotenv
-from pydantic import BaseModel
-
-load_dotenv()
 from langchain_core.utils.json import parse_json_markdown
 import base64
 from mistralai import Mistral
+load_dotenv()
 
 class OCRAgent:
     def __init__(self):

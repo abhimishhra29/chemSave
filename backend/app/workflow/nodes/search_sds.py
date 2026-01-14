@@ -1,6 +1,7 @@
 from app.workflow.state import State
 from langchain_tavily import TavilySearch
 from urllib.parse import urlparse
+from langchain_core.runnables import RunnableLambda
 
 tavily = TavilySearch(max_results=3)
 
@@ -24,7 +25,13 @@ def search_sds_node(state: State) -> State:
     terms_query = " OR ".join(f'"{t}"' for t in search_terms)
     query = (f'site:{domain} ({terms_query}) '
             '("SDS" OR "Safety Data Sheet") filetype:pdf')
+<<<<<<< HEAD
     sds_results = tavily.invoke(query)
     state["sds_search_results"] = sds_results["results"]
+=======
+    # sds_results = tavily.invoke(query)
+    
+    state["sds_search_results"] = "https://www.sydneysolvents.com.au/assets/files/Isopropanol%20SDS.pdf"
+>>>>>>> 5445280 (updated tavily mock)
     print("SDS Search Results: ", state["sds_search_results"])
     return state
