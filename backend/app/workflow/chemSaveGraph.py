@@ -1,9 +1,8 @@
-from __future__ import annotations
-from typing_extensions import TypedDic
-from state import State
+from .state import State
+from .nodes.ocr_node import ocr_node
 from langgraph.graph import END, START, StateGraph
-from nodes.ocr_node import ocr_node
-from agents.ocr_agent import OCRAgent
+from .nodes.ocr_node import ocr_node
+from app.agents.ocr_agent import OCRAgent
 
 class ChemSaveGraph:
     def __init_(self):

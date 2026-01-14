@@ -1,5 +1,5 @@
-from state import State
-from agents.ocr_agent import OCRAgent
+from app.workflow.state import State
+from app.agents.ocr_agent import OCRAgent
 
 ocr_agent = OCRAgent()
 
