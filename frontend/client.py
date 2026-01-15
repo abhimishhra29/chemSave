@@ -3,13 +3,14 @@ Client for interacting with the ChemCheck backend API.
 """
 from __future__ import annotations
 
+import json
 import os
 from typing import IO
 
 import requests
 
 # Read the base URL from an environment variable, with a default for local dev.
-API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8001")
 IDENTIFY_ENDPOINT = f"{API_BASE_URL}/identify-chemical"
 DEFAULT_TIMEOUT = 120  # Seconds
 

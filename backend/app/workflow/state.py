@@ -5,7 +5,7 @@ class State(TypedDict):
     image_bytes: bytes
     ocr_text: Optional[str]
 
-    # inputs to search (you can fill these later via an LLM parse node)
+    # inputs to search 
     manufacturer_name: Optional[str]
     manufacturer_url: Optional[str]
     product_name: Optional[str]
@@ -13,5 +13,5 @@ class State(TypedDict):
     cas_number: Optional[str]
     description: Optional[str]
     sds_search_results: Optional[str]
-    validation_status:  bool
+    validation_status:  Optional[bool]
     

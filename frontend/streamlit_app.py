@@ -1,81 +1,51 @@
 """
-A Streamlit web frontend for the ChemCheck application.
-
-This UI allows users to upload chemical label images and view the results
-of the SDS (Safety Data Sheet) identification workflow.
+Minimal Streamlit frontend for the ChemCheck application.
 """
 import streamlit as st
 
 from client import APIError, identify_chemical
 
 
-def display_results(result: dict):
-    """Renders the API response in a user-friendly format."""
-    st.subheader("Workflow Result")
-
-    status = result.get("sds", {}).get("status", "unknown")
-    if status == "found":
-        st.success(f"**Status:** {status.upper()}")
-    else:
-        st.warning(f"**Status:** {status.upper()}")
-
-    st.markdown(f"""**Message:** {result.get("sds", {}).get("message", "No message.")}""")
-
-    st.divider()
-
-    with st.expander("OCR Details"):
-        ocr_data = result.get("ocr", {})
-        st.markdown(f"**Product Name:** {ocr_data.get('product_name') or '_Not found_'}")
-        st.markdown(f"**Product Code:** {ocr_data.get('product_code') or '_Not found_'}")
-        st.markdown(f"**CAS Number:** {ocr_data.get('cas_number') or '_Not found_'}")
-        st.markdown(f"**Manufacturer:** {ocr_data.get('manufacturer_name') or '_Not found_'}")
-        st.text_area("Full Extracted Text", ocr_data.get("full_text", ""), height=200)
-
-    with st.expander("SDS Search Details"):
-        sds_data = result.get("sds", {})
-        st.markdown(f"**Manufacturer URL:** {sds_data.get('manufacturer_url') or '_Not found_'}")
-        st.markdown(f"**SDS URL:** {sds_data.get('sds_url') or '_Not found_'}")
-        st.markdown(f"**Search Query:** `{sds_data.get('sds_query') or '_Not applicable_'}`")
-        
-        st.write("**Search Attempts:**")
-        st.json(sds_data.get("sds_attempts", []))
-
-    with st.expander("Validation Details"):
-        st.json(result.get("sds", {}).get("validation", {}))
-
-
-# --- Main UI ---
-
-st.set_page_config(page_title="ChemCheck", page_icon="🧪", layout="wide")
+st.set_page_config(page_title="ChemCheck", page_icon="🧪")
 
 st.title("🧪 ChemCheck")
-st.write("Upload front and/or back label images to start the identification flow.")
+st.write("Upload a label image to extract details.")
 
-col1, col2 = st.columns(2)
-with col1:
-    front_image = st.file_uploader(
-        "Front image",
-        type=["png", "jpg", "jpeg"],
-        key="front_image",
-    )
-with col2:
-    back_image = st.file_uploader(
-        "Back image (optional)",
-        type=["png", "jpg", "jpeg"],
-        key="back_image",
-    )
+image = st.file_uploader("Label image", type=["png", "jpg", "jpeg"])
 
-if st.button("Submit", type="primary"):
-    if not front_image and not back_image:
-        st.error("Upload at least one image.")
+if st.button("Run OCR", type="primary"):
+    if not image:
+        st.error("Upload an image to continue.")
         st.stop()
 
-    with st.spinner("Processing... This may take a minute."):
+    with st.spinner("Processing..."):
         try:
-            result_data = identify_chemical(front_image, back_image)
-            st.success("Processing complete!")
-            display_results(result_data)
+            result_data = identify_chemical(front_image=image, back_image=None)
         except APIError as exc:
-            st.error(f"An error occurred: {exc}")
+            st.error(f"API error: {exc}")
+            st.stop()
         except ValueError as exc:
             st.error(f"Invalid input: {exc}")
+            st.stop()
+
+    def display_value(label: str, value: str | None) -> None:
+        st.markdown(f"**{label}:** {value or '—'}")
+
+    display_value("Product Name", result_data.get("product_name"))
+    display_value("Product Code", result_data.get("product_code"))
+    display_value("CAS Number", result_data.get("cas_number"))
+    display_value("Manufacturer", result_data.get("manufacturer_name"))
+    display_value("Manufacturer URL", result_data.get("manufacturer_url"))
+    display_value("SDS URL", result_data.get("sds_search_results"))
+    display_value(
+        "Validation Status",
+        str(result_data.get("validation_status"))
+        if result_data.get("validation_status") is not None
+        else None,
+    )
+
+    ocr_text = result_data.get("ocr_text")
+    if ocr_text:
+        st.text_area("OCR Text", ocr_text, height=300)
+    else:
+        st.info("No OCR text returned.")

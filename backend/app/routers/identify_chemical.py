@@ -26,5 +26,12 @@ async def identify_chemical(
 
 
     return {
-        "ocr_text": result["ocr_text"]
+            "ocr_text": result.get("ocr_text"),
+            "product_name": result.get("product_name"),
+            "product_code": result.get("product_code"),
+            "cas_number": result.get("cas_number"),
+            "manufacturer_name": result.get("manufacturer_name"),
+            "manufacturer_url": result.get("manufacturer_url"),
+            "sds_search_results": result.get("sds_search_results"),
+            "validation_status": result.get("validation_status"),
     }
