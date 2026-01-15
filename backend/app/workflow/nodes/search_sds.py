@@ -2,7 +2,7 @@ from app.workflow.state import State
 from langchain_tavily import TavilySearch
 from urllib.parse import urlparse
 
-tavily = TavilySearch(max_results=3, include_domains=[".au"])
+tavily = TavilySearch(max_results=3, include_domains=[".au",".com.au"])
 
 def search_sds_node(state: State) -> State:
     """
@@ -19,7 +19,7 @@ def search_sds_node(state: State) -> State:
     manufacturer_url = state.get("manufacturer_url", "")
 
     domain = urlparse(manufacturer_url).netloc 
-
+    print( "Domain:" ,domain)
     search_terms = [t for t in [manufacturer_name, product_name, product_code, cas_number, description] if t]
     terms_query = " OR ".join(f'"{t}"' for t in search_terms)
     query = (f'site:{domain} ({terms_query}) '
@@ -30,5 +30,8 @@ def search_sds_node(state: State) -> State:
         if url.endswith(".pdf"):
             state["sds_search_results"] = result["url"]
             break   
+    else:
+        state["sds_search_results"] = None
+
     print("SDS Search Results: ", state["sds_search_results"])
     return state
