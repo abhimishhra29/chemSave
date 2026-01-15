@@ -6,7 +6,7 @@ validation_agent = validationAgent()
 
 def validate_sds_node(state: State) -> State:
 
-    sds_url=state["sds_search_results"]
+    sds_url = state.get("sds_search_results")
     sds_file_path=download_pdf(sds_url)
     sds_text=extract_pdf_text(sds_file_path)
 
