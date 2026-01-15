@@ -29,8 +29,6 @@ def search_manufacturer_node(state: State) -> State:
     query = f'"{manufacturer_name}" official website Australia site:.com.au OR site:.au'
 
     tavily_results = tavily.invoke(query)
-    
-    best = None
 
     best = None
     for result in tavily_results["results"]:

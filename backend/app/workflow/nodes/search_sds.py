@@ -2,36 +2,34 @@ from app.workflow.state import State
 from langchain_tavily import TavilySearch
 from urllib.parse import urlparse
 
-tavily = TavilySearch(max_results=3, include_domains=[".au",".com.au"])
+tavily = TavilySearch(max_results=10, include_domains=[".au", ".com.au"])
 
 def search_sds_node(state: State) -> State:
-    """
-    LangGraph Search SDS node:
-    - reads manufacturer_name, product_name, product_code, cas_number, description from state
-    - runs Tavily search
-    - stores search results in sds_results
-    """
-    manufacturer_name = state.get("manufacturer_name", "")
+    SDS_keywords = ["sds", "safety data sheet", "safety datasheet"]
+
     product_name = state.get("product_name", "")
     product_code = state.get("product_code", "")
     cas_number = state.get("cas_number", "")
-    description = state.get("description", "")  
     manufacturer_url = state.get("manufacturer_url", "")
 
-    domain = urlparse(manufacturer_url).netloc 
-    print( "Domain:" ,domain)
-    search_terms = [t for t in [manufacturer_name, product_name, product_code, cas_number, description] if t]
-    terms_query = " OR ".join(f'"{t}"' for t in search_terms)
-    query = (f'site:{domain} ({terms_query}) '
-            '("SDS" OR "Safety Data Sheet") filetype:pdf')
-    sds_results = tavily.invoke(query)
-    for result in sds_results["results"]:
-        url = result.get("url", "").lower()
-        if url.endswith(".pdf"):
-            state["sds_search_results"] = result["url"]
-            break   
-    else:
-        state["sds_search_results"] = None
+    domain = urlparse(manufacturer_url).netloc
 
-    print("SDS Search Results: ", state["sds_search_results"])
+    # keep query clean (minimal but better)
+    search_terms = [t for t in [product_code, cas_number, product_name] if t]
+    terms_query = " OR ".join(f'"{t}"' for t in search_terms)
+
+    query = f'site:{domain} ({terms_query}) ("SDS" OR "Safety Data Sheet") filetype:pdf'
+    sds_results = tavily.invoke(query)
+
+    state["sds_search_results"] = None
+
+    for result in sds_results.get("results", []):
+        url = (result.get("url") or "")
+        title = (result.get("title") or "")
+        blob = (url + " " + title).lower()
+
+        if url.lower().endswith(".pdf") and any(k in blob for k in SDS_keywords):
+            state["sds_search_results"] = url
+            break
+
     return state
