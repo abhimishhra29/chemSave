@@ -38,7 +38,7 @@ def search_sds_node(state: State) -> State:
         if domain and not same_domain(url, domain):
             continue
 
-        if url.lower().endswith(".pdf") and any(k in blob for k in SDS_keywords):
+        if any(k in blob for k in SDS_keywords):
             state["sds_search_results"] = url
             break
 
